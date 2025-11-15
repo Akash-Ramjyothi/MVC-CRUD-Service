@@ -26,6 +26,6 @@ public class EmployeeController {
         theModel.addAttribute("employees", theEmployees);
         System.out.println("theModel: " + theModel);
 
-        return "list-employees";
+        return "employees/list-employees";
     }
 }
