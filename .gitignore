@@ -1,25 +1,52 @@
-HELP.md
+# ===============================
+# Maven / Java
+# ===============================
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# Maven Wrapper
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Spring Boot
+# ===============================
+tHELP.md
+*.pid
+*.pid.lock
+
+# ===============================
+# Eclipse / STS
+# ===============================
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### IntelliJ IDEA ###
-.idea
+# ===============================
+# IntelliJ IDEA
+# ===============================
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
 
-### NetBeans ###
+# ===============================
+# NetBeans
+# ===============================
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,5 +56,20 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# ===============================
+# VS Code
+# ===============================
 .vscode/
+
+# ===============================
+# Test & Coverage
+# ===============================
+/coverage/
+/jacoco.exec
+/jacoco*.xml
+
+# ===============================
+# Temporary / Backup
+# ===============================
+*.swp
+*~
