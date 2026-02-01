@@ -6,12 +6,31 @@ import java.util.List;
 
 public interface EmployeeService {
 
+    /**
+     * Fetch all employees ordered by last name.
+     */
     List<Employee> findAll();
 
-    Employee findById(int theId);
+    /**
+     * Find an employee by id.
+     * @throws jakarta.persistence.EntityNotFoundException if not found
+     */
+    Employee findById(int id);
 
-    Employee save(Employee theEmployee);
+    /**
+     * Create or persist a new employee.
+     */
+    Employee save(Employee employee);
 
-    void deleteById(int theId);
+    /**
+     * Update an existing employee by id.
+     * @throws jakarta.persistence.EntityNotFoundException if not found
+     */
+    Employee update(int id, Employee employee);
 
+    /**
+     * Delete an employee by id.
+     * @throws jakarta.persistence.EntityNotFoundException if not found
+     */
+    void deleteById(int id);
 }
