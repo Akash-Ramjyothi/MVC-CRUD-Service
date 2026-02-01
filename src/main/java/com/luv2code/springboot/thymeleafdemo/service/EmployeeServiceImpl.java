@@ -2,56 +2,69 @@ package com.luv2code.springboot.thymeleafdemo.service;
 
 import com.luv2code.springboot.thymeleafdemo.dao.EmployeeRepository;
 import com.luv2code.springboot.thymeleafdemo.entity.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeRepository employeeRepository;
+    private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
-    @Autowired
-    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository) {
-        employeeRepository = theEmployeeRepository;
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Employee> findAll() {
+        log.debug("Fetching all employees ordered by last name");
         return employeeRepository.findAllByOrderByLastNameAsc();
     }
 
     @Override
-    public Employee findById(int theId) {
-        Optional<Employee> result = employeeRepository.findById(theId);
+    @Transactional(readOnly = true)
+    public Employee findById(int id) {
+        log.debug("Fetching employee with id={}", id);
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Employee not found with id - " + id));
+    }
 
-        Employee theEmployee = null;
+    @Override
+    public Employee save(Employee employee) {
+        log.debug("Saving employee: {}", employee);
+        return employeeRepository.save(employee);
+    }
 
-        if (result.isPresent()) {
-            theEmployee = result.get();
-        } else {
-            // we didn't find the employee
-            throw new RuntimeException("Did not find employee id - " + theId);
+    @Override
+    public Employee update(int id, Employee updatedEmployee) {
+        log.debug("Updating employee with id={}", id);
+
+        Employee existing = findById(id);
+        existing.setFirstName(updatedEmployee.getFirstName());
+        existing.setLastName(updatedEmployee.getLastName());
+        existing.setEmail(updatedEmployee.getEmail());
+
+        return employeeRepository.save(existing);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        log.debug("Deleting employee with id={}", id);
+
+        if (!employeeRepository.existsById(id)) {
+            throw new EntityNotFoundException(
+                    "Cannot delete. Employee not found with id - " + id);
         }
 
-        return theEmployee;
-    }
-
-    @Override
-    public Employee save(Employee theEmployee) {
-        return employeeRepository.save(theEmployee);
-    }
-
-    @Override
-    public void deleteById(int theId) {
-        employeeRepository.deleteById(theId);
+        employeeRepository.deleteById(id);
     }
 }
-
-
-
-
-
-
